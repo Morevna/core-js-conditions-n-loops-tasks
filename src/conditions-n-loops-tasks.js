@@ -313,8 +313,27 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  let length = 0;
+  while (arr[length] !== undefined) {
+    length += 1;
+  }
+
+  for (let i = 0; i < length; i += 1) {
+    let leftSum = 0;
+    let rightSum = 0;
+
+    for (let j = 0; j < i; j += 1) {
+      leftSum += arr[j];
+    }
+    for (let j = i + 1; j < length; j += 1) {
+      rightSum += arr[j];
+    }
+    if (leftSum === rightSum) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 /**
@@ -338,9 +357,67 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const matrix = [];
+  let rowIndex = 0;
+  while (rowIndex < size) {
+    const row = [];
+    let colIndex = 0;
+    while (colIndex < size) {
+      row[colIndex] = 0;
+      colIndex += 1;
+    }
+    matrix[rowIndex] = row;
+    rowIndex += 1;
+  }
+
+  let top = 0;
+  let right = size - 1;
+  let bottom = size - 1;
+  let left = 0;
+  let num = 1;
+
+  while (num <= size * size) {
+    let i = left;
+    while (i <= right) {
+      matrix[top][i] = num;
+      num += 1;
+      i += 1;
+    }
+    top += 1;
+
+    i = top;
+    while (i <= bottom) {
+      matrix[i][right] = num;
+      num += 1;
+      i += 1;
+    }
+    right -= 1;
+
+    i = right;
+    while (i >= left && top <= bottom) {
+      matrix[bottom][i] = num;
+      num += 1;
+      i -= 1;
+    }
+    bottom -= 1;
+
+    i = bottom;
+    while (i >= top && left <= right) {
+      matrix[i][left] = num;
+      num += 1;
+      i -= 1;
+    }
+    left += 1;
+  }
+  return matrix;
 }
+//  *        [      0
+//  *          [0, 1, 2, 3],
+//  *  4=>     [0, 1, 2, 3],       3
+//  *       0  [0, 1, 2, 3],
+//  *          [0, 1, 2, 3]
+//  *        ]      3
 
 /**
  * Rotates a matrix by 90 degrees clockwise in place.
