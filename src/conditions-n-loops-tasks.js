@@ -71,8 +71,11 @@ function getMaxNumber(a, b, c) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
-function canQueenCaptureKing(/* queen, king */) {
-  throw new Error('Not implemented');
+function canQueenCaptureKing(queen, king) {
+  const col = queen.x === king.x;
+  const row = queen.y === king.y;
+  const diagon = Math.abs(queen.x - king.x) === Math.abs(queen.y - king.y);
+  return col || row || diagon;
 }
 
 /**
@@ -532,8 +535,23 @@ function sortByAsc(arrOld) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  function singleShuffle(s) {
+    let result = '';
+    for (let i = 0; i < s.length; i += 2) {
+      result += s[i];
+    }
+    for (let i = 1; i < s.length; i += 2) {
+      result += s[i];
+    }
+    return result;
+  }
+
+  let current = str;
+  for (let i = 0; i < iterations; i += 1) {
+    current = singleShuffle(current);
+  }
+  return current;
 }
 
 /**
