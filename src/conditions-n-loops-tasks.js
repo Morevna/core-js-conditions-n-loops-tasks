@@ -536,22 +536,57 @@ function sortByAsc(arrOld) {
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
 function shuffleChar(str, iterations) {
-  function singleShuffle(s) {
-    let result = '';
-    for (let i = 0; i < s.length; i += 2) {
-      result += s[i];
+  const n = str.length;
+  if (iterations === 0 || n === 0) return str;
+
+  function perm(i) {
+    if (i % 2 === 0) {
+      return i / 2;
     }
-    for (let i = 1; i < s.length; i += 2) {
-      result += s[i];
-    }
-    return result;
+    return Math.floor(n / 2) + Math.floor(i / 2);
   }
 
-  let current = str;
-  for (let i = 0; i < iterations; i += 1) {
-    current = singleShuffle(current);
+  const maxPow = 31;
+  const jump = [];
+
+  jump[0] = [];
+  for (let i = 0; i < n; i += 1) {
+    jump[0][i] = perm(i);
   }
-  return current;
+
+  for (let p = 1; p <= maxPow; p += 1) {
+    jump[p] = [];
+    for (let i = 0; i < n; i += 1) {
+      jump[p][i] = jump[p - 1][jump[p - 1][i]];
+    }
+  }
+
+  const resultIndices = [];
+  for (let i = 0; i < n; i += 1) {
+    let pos = i;
+    let power = 0;
+    let iter = iterations;
+    while (iter > 0) {
+      if (iter % 2 === 1) {
+        pos = jump[power][pos];
+      }
+      iter = Math.floor(iter / 2);
+      power += 1;
+    }
+    resultIndices[i] = pos;
+  }
+
+  const resultChars = [];
+  for (let i = 0; i < n; i += 1) {
+    resultChars[resultIndices[i]] = str[i];
+  }
+
+  let result = '';
+  for (let i = 0; i < n; i += 1) {
+    result += resultChars[i];
+  }
+
+  return result;
 }
 
 /**
